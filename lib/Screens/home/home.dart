@@ -1,6 +1,5 @@
 import 'package:ecommerce/Components/loading.dart';
 import 'package:ecommerce/Models/restaurantDetail.dart';
-// import 'package:ecommerce/Services/auth.dart';
 import 'package:ecommerce/Services/restaurant.Services.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
