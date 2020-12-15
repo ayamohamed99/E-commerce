@@ -63,6 +63,7 @@ class _HomeState extends State<Home> {
                 padding: const EdgeInsets.only(right: 10.0),
                 child: SmoothStarRating(
                   rating: restaurant[index].rate.toDouble(),
+                  
                   isReadOnly: false,
                   size: 25,
                   filledIconData: Icons.star,
