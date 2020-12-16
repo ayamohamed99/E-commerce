@@ -39,8 +39,8 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 30.0),
-            child: Image.network(
-              restaurant[restaurant.length - index - 1].img,
+            child: Image.asset(restaurant[restaurant.length - index - 1].img,
+            
               fit: BoxFit.fill,
               width: 300,
               height: 150,
