@@ -14,7 +14,7 @@ class RestaurantService{
 
   RestaurantService({this.rId});
 
-  Future addUniversity(RestaurantDetail data) async {
+  Future addRestaurant(RestaurantDetail data) async {
      return await _rep.addDocument(data.toJson());
   }
   
