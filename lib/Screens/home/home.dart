@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
   Widget dropdownlist(int index){
     return Container(
       child: Padding(
-        padding: const EdgeInsets.only(left:270.0),
+        padding: const EdgeInsets.only(left:240.0),
         child: FlatButton(onPressed: (){},
         child: Text(category[category.length - index - 1].categoryName,
         style: TextStyle(fontSize: 20)),),
@@ -161,18 +161,7 @@ class _HomeState extends State<Home> {
                         color: Colors.green[400],
                         fontStyle: FontStyle.italic),
                   ),
-                  IconButton(onPressed: (){
-                    showSearch(context: null, delegate:null);
-                  },
-                  icon: Icon(Icons.search),
-                  )
-                
-                ],
-              ),
-               
- Row(
-   children: [
-     Spacer(),
+                  Spacer(),
      FlatButton.icon(onPressed: (){
                                setState(() {
                                   _visible = !_visible;
@@ -180,9 +169,9 @@ class _HomeState extends State<Home> {
                             }, 
                             icon: Icon(Icons.list ,size: 30,),
                              label: Text('Categories' ,style: TextStyle(fontSize: 20),)),
-   ],
- ),
-               Visibility(
+                ],
+              ),
+            Visibility(
               visible: _visible,
               child: Row(
                 children: [
@@ -201,13 +190,7 @@ class _HomeState extends State<Home> {
                 child: ListView(children: <Widget>[
               for (k = 0; k < restaurant.length; k++) _bBuildCard()
             ]))
-            // Expanded(
-            //   child: ListView.builder(
-            //     shrinkWrap: true,
-            //     itemCount: restaurant.length,
-            //     itemBuilder: (BuildContext contex, int index) => card(index),
-            //   ),
-            // )
+            
           ],
         ),
       ),
