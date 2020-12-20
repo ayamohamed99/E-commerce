@@ -5,7 +5,6 @@ class RestaurantDetail {
   num rate;
   String catId;
   String rId;
-
   num numSeats;
   num numTables;
   num timeRes;

@@ -43,6 +43,7 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontSize: 20)),
           ),
         ),
+
       ),
     );
   }
@@ -175,6 +176,7 @@ class _HomeState extends State<Home> {
                     )),
               ],
             ),
+
             Visibility(
               visible: _visible,
               child: Row(children: [
@@ -192,7 +194,7 @@ class _HomeState extends State<Home> {
                 child: ListView(children: <Widget>[
               for (k = 0; k < restaurant.length; k++) _bBuildCard()
             ]))
-          ],
+          ]
         ),
       ),
     );
