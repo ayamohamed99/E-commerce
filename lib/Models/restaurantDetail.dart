@@ -3,28 +3,38 @@ class RestaurantDetail {
   String location;
   String img;
   num rate;
-  String sort;
+  String hotline;
+  String categoryN;
+  String catId;
   String rId;
   num numSeats;
   num numTables;
   num timeRes;
+  num hit;
+  String headline;
   String description;
   
 
   RestaurantDetail(
       {this.name,this.description,this.numSeats,this.numTables,this.timeRes,
-       this.location, this.img, this.rate, this.rId, this.sort});
+       this.location, this.img, this.headline, 
+       this.rate, this.rId, this.catId , 
+       this.hit , this.hotline , this.categoryN});
 
   RestaurantDetail.fromMap(Map snapshot, String id)
       : rId = id ?? '',
         name = snapshot['name'] ?? '',
         location = snapshot['location'] ?? '',
         img = snapshot['img'] ?? '',
-        sort = snapshot['sort'] ??'',
+        headline = snapshot['headline'] ?? '',
+        catId = snapshot['catId'] ??'',
         rate = snapshot['rate'] ?? '' ,
+         categoryN = snapshot['categoryN'] ?? '' ,
+        hotline = snapshot['hotline'] ?? '' ,
         numSeats = snapshot['numSeats']??'',
         numTables = snapshot['numTables']??'',
         timeRes=snapshot['timeRes']??'',
+         hit = snapshot['hit'] ?? 0,
         description=snapshot['description']??'';
 
         
@@ -35,12 +45,16 @@ class RestaurantDetail {
       "name": name,
       "location": location,
       "img": img,
-      "sort":sort,
+      "catId":catId,
       "rate": rate,
+      "categoryN" :categoryN,
       "numSeats":numSeats,
       "numTables":numTables,
       "timeRes": timeRes,
       "description":description,
+      "hit": hit,
+      "headline" : headline,
+      "hotline" : hotline
     };
   }
 }
