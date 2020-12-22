@@ -163,9 +163,9 @@ class _HomeState extends State<Home> {
               Text(
                 ' Our Restaurant',
                 style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.green[400],
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[700],
                     fontStyle: FontStyle.italic),
               ),
               Spacer(),

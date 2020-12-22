@@ -17,6 +17,44 @@ class SecHome extends StatefulWidget {
 }
 
 class _SecHomeState extends State<SecHome> {
+
+Future<void>_showMyDialog() async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('HOTLINE'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('If you faced a problem and you need to contact with us Please Call  this number it is  an easy fast way to contact with us '
+              + '\n\n'+restaurant.hotline,
+              style: TextStyle(fontSize: 18,
+                
+              ),
+              ), 
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          new FlatButton(
+            child: Text('Close',
+            style: TextStyle(fontSize: 20 ,
+                fontWeight: FontWeight.w500)
+            
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); 
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
   String rId;
   var restaurantV;
   _SecHomeState(this.rId);
@@ -66,11 +104,13 @@ class _SecHomeState extends State<SecHome> {
             title: Text(resHeadline,
                 style: TextStyle(
                     color: Colors.black,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w400,
                     fontSize: 20,
                     height: 1.5,
-                    fontStyle: FontStyle.italic)),
+                    fontStyle: FontStyle.italic),
+                  ),
           ),
+        
           Visibility(
             visible: _visible,
             child: ListTile(
@@ -79,29 +119,32 @@ class _SecHomeState extends State<SecHome> {
                   _visible = !_visible;
                 });
               },
-              subtitle: Text('read less',
+              subtitle: Text('Read less',
                   textAlign: TextAlign.end,
                   style: TextStyle(
                       color: Colors.red[500],
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w900,
                       fontSize: 20,
-                      fontStyle: FontStyle.italic)),
+                      fontStyle: FontStyle.normal)),
               title: Text(resDesc,
                   style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w400,
                       fontSize: 20,
                       height: 1.5,
                       fontStyle: FontStyle.italic)),
             ),
           ),
+          SizedBox(height: 25,),
           RaisedButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        padding: EdgeInsets.all(8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             color: Colors.green[500],
             onPressed: (){}, 
           child: Text('BOOK' , 
+
           style: TextStyle(fontWeight: FontWeight.bold,
-          fontSize: 35,
+          fontSize: 30,
           color: Colors.white),))
           
         ]));
@@ -112,44 +155,57 @@ class _SecHomeState extends State<SecHome> {
     if (restaurant == null) return Loading();
     return Scaffold(
       drawer: Drawer(
-            child: Column(children: <Widget>[
+            child: Column(
+              
+              children: <Widget>[
           Container(
             width: double.infinity,
             height: 100,
             padding: EdgeInsets.all(8),
-            color: Colors.green[700],
+            color: Colors.green[500],
             child: Center(
                 child: Text(
               restaurant.name,
-              style: TextStyle(fontSize: 30),
+              style: TextStyle(fontSize: 25,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+               height: 3,
+              
+              ),
             )),
           ),
-          FlatButton.icon(
+          SizedBox(height: 30,),
+          Container(
+            padding: EdgeInsets.only(right: 150),
+          child:  FlatButton.icon(
               onPressed: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Home()));
               },
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home,),
               label: Text(
                 'Home',
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25,
+                fontWeight: FontWeight.bold,
+                ),
+                
               )),
+          ),
+          
               SizedBox(height: 30,),
-          FlatButton.icon(
-              onPressed: () {},
-              icon: Icon(FontAwesomeIcons.phoneAlt),
-              label: Text(
-                ' Hotline  ' + restaurant.hotline,
-                style: TextStyle(fontSize: 25),
-              )),
-              SizedBox(height: 30,),
-           Row(
+             
+          Container(
+            padding: EdgeInsets.only(right:35),
+            child:  Row(
              children: [
-               SizedBox(width: 70,),
+               SizedBox(width:30,),
                Text('Rate  ',
                 style: TextStyle(fontSize: 25 , color: Colors.black,
                 fontWeight: FontWeight.w500),),
-               SmoothStarRating(
+                Card(
+
+                  child:SmoothStarRating(
                     rating: restaurant.rate.toDouble(),
                     isReadOnly: true,
                     size: 20,
@@ -163,16 +219,34 @@ class _SecHomeState extends State<SecHome> {
                     spacing: 2.0,
                     onRated: null,
                   ),
+                ),
+               
              ],
            ),
+          ),
             SizedBox(height: 30,),
-          FlatButton.icon(
+
+         Container(
+           padding: EdgeInsets.only(right:90),
+           child:  FlatButton.icon(
               onPressed: () {},
               icon: Icon(FontAwesomeIcons.utensils),
               label: Text(
                 restaurant.categoryN,
                 style: TextStyle(fontSize: 25),
-              ))
+              )),),
+              SizedBox(height: 30,),
+               Container(
+                 padding: EdgeInsets.only(right:70),
+         child: FlatButton.icon(
+              onPressed: _showMyDialog,
+              icon: Icon(FontAwesomeIcons.phoneAlt),
+              label: Text(
+                ' Contact us ',
+                style: TextStyle(fontSize: 25,
+                ),
+              )),),
+              
         ])),
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
