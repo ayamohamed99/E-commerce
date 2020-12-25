@@ -9,22 +9,27 @@ class RestaurantDetail {
   String rId;
   num numSeats;
   num numTables;
-  // num timeRes;
+  List<num> timeRes;
+  // num hit;
   String headline;
   String description;
+  // String imgUrl;
   
 
   RestaurantDetail(
-      {this.name,this.description,this.numSeats,this.numTables,
-      // this.timeRes,
+      {this.name,this.description,this.numSeats,this.numTables,//this.timeRes,
        this.location, this.img, this.headline, 
-       this.rate, this.rId, this.catId ,  this.hotline , this.categoryN});
+       this.rate, this.rId, this.catId , 
+        this.hotline , this.categoryN ,
+        //  this.imgUrl 
+         });
 
   RestaurantDetail.fromMap(Map snapshot, String id)
       : rId = id ?? '',
         name = snapshot['name'] ?? '',
         location = snapshot['location'] ?? '',
         img = snapshot['img'] ?? '',
+        // imgUrl = snapshot['imgUrl']?? '',
         headline = snapshot['headline'] ?? '',
         catId = snapshot['catId'] ??'',
         rate = snapshot['rate'] ?? '' ,
@@ -32,7 +37,7 @@ class RestaurantDetail {
         hotline = snapshot['hotline'] ?? '' ,
         numSeats = snapshot['numSeats']??'',
         numTables = snapshot['numTables']??'',
-        // timeRes=snapshot['timeRes']??'',
+        //timeRes=snapshot['timeRes']??'',
         description=snapshot['description']??'';
 
         
@@ -43,12 +48,13 @@ class RestaurantDetail {
       "name": name,
       "location": location,
       "img": img,
+      // "imgUrl": imgUrl,
       "catId":catId,
       "rate": rate,
       "categoryN" :categoryN,
       "numSeats":numSeats,
       "numTables":numTables,
-      // "timeRes": timeRes,
+      //"timeRes": timeRes,
       "description":description,
       "headline" : headline,
       "hotline" : hotline

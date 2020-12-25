@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // final AuthService _auth = AuthService();
-
+ bool loading = true;
   List<CategoryDetail> category;
 
   CategoryService catServ = new CategoryService();
@@ -30,6 +30,7 @@ class _HomeState extends State<Home> {
     _fechRestaurantData();
   }
 
+
   bool _visible = false;
 
   List<RestaurantDetail> restaurant;
@@ -43,6 +44,11 @@ class _HomeState extends State<Home> {
   Future<List<RestaurantDetail>> _fechRestaurantData() async {
     restaurant = await resServ.fetchData();
     resSort = await resServ.fetchData();
+     setState(() {
+      if(restaurant != null)
+        loading = false;
+      else loading = true;
+    });
   }
 
   // // ignore: must_call_super
@@ -61,8 +67,7 @@ class _HomeState extends State<Home> {
       child: Card(
         child: FlatButton(
           onPressed: () {},
-          child: Text(category[k].categoryName,
-           style: TextStyle(fontSize: 20)),
+          child: Text(category[k].categoryName, style: TextStyle(fontSize: 20)),
         ),
       ),
     );
@@ -77,8 +82,8 @@ class _HomeState extends State<Home> {
         child: Column(
           children: <Widget>[
             SizedBox(
-                height: 30,
-              ),
+              height: 30,
+            ),
             Container(
               height: 150,
               child: Image.network(
@@ -94,8 +99,10 @@ class _HomeState extends State<Home> {
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50)),
-                child: Text(restaurant[restaurant.length - index - 1].name,
-                style: TextStyle(fontSize: 25),),
+                child: Text(
+                  restaurant[restaurant.length - index - 1].name,
+                  style: TextStyle(fontSize: 25),
+                ),
                 onPressed: () {
                   setState(() async {
                     await resServ.update(
@@ -130,22 +137,22 @@ class _HomeState extends State<Home> {
               ),
             ]),
             SizedBox(
-                height: 30,
-              ),
+              height: 30,
+            ),
           ],
         ),
-        
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (restaurant == null) return Loading();
-    return Scaffold(
+    return loading ?  Loading()
+     :Scaffold(
+     
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('E-Commerce Project'),
+        title: Text('Vendor App'),
         backgroundColor: Colors.green[400],
       ),
       body: Container(
@@ -161,12 +168,12 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Text(
-                ' Our Restaurant',
+                ' The Restaurants ',
                 style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.green[700],
-                    fontStyle: FontStyle.italic),
+                    fontStyle: FontStyle.normal),
               ),
               Spacer(),
               FlatButton.icon(
@@ -185,7 +192,7 @@ class _HomeState extends State<Home> {
                   )),
             ],
           ),
-          
+
           // Visibility(
           //   visible: _visible,
           //   child: Row(children: [
