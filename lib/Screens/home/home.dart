@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
               ),
             Container(
               height: 150,
-              child: Image.asset(
+              child: Image.network(
                 restaurant[restaurant.length - index - 1].img,
                 fit: BoxFit.fill,
               ),

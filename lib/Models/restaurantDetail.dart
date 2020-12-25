@@ -9,17 +9,16 @@ class RestaurantDetail {
   String rId;
   num numSeats;
   num numTables;
-  num timeRes;
-  num hit;
+  // num timeRes;
   String headline;
   String description;
   
 
   RestaurantDetail(
-      {this.name,this.description,this.numSeats,this.numTables,this.timeRes,
+      {this.name,this.description,this.numSeats,this.numTables,
+      // this.timeRes,
        this.location, this.img, this.headline, 
-       this.rate, this.rId, this.catId , 
-       this.hit , this.hotline , this.categoryN});
+       this.rate, this.rId, this.catId ,  this.hotline , this.categoryN});
 
   RestaurantDetail.fromMap(Map snapshot, String id)
       : rId = id ?? '',
@@ -33,8 +32,7 @@ class RestaurantDetail {
         hotline = snapshot['hotline'] ?? '' ,
         numSeats = snapshot['numSeats']??'',
         numTables = snapshot['numTables']??'',
-        timeRes=snapshot['timeRes']??'',
-         hit = snapshot['hit'] ?? 0,
+        // timeRes=snapshot['timeRes']??'',
         description=snapshot['description']??'';
 
         
@@ -50,9 +48,8 @@ class RestaurantDetail {
       "categoryN" :categoryN,
       "numSeats":numSeats,
       "numTables":numTables,
-      "timeRes": timeRes,
+      // "timeRes": timeRes,
       "description":description,
-      "hit": hit,
       "headline" : headline,
       "hotline" : hotline
     };
