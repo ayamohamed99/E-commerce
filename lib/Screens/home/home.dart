@@ -31,7 +31,6 @@ class _HomeState extends State<Home> {
     _fechRestaurantData();
   }
 
-  bool _visible = false;
 
   List<RestaurantDetail> restaurant;
   List<RestaurantDetail> restaurantall;
@@ -88,6 +87,8 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+    String dropdownValue = 'Categories';
+
 
   Widget card(BuildContext context, int index) {
     return Container(
@@ -117,7 +118,7 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.circular(50)),
                 child: Text(
                   restaurant[restaurant.length - index - 1].name,
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: 20),
                 ),
                 onPressed: () {
                   setState(() async {
@@ -208,20 +209,32 @@ class _HomeState extends State<Home> {
                           fontStyle: FontStyle.normal),
                     ),
                     Spacer(),
-                    FlatButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            _visible = !_visible;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.list,
-                          size: 30,
-                        ),
-                        label: Text(
-                          'Categories',
-                          style: TextStyle(fontSize: 20),
-                        )),
+                    DropdownButton(
+                                value: dropdownValue,
+                                icon: Icon(Icons.list),
+                                iconSize: 25,
+                                elevation: 16,
+                                items: <String>[
+                                  'Categories',
+                                  'Fast Food',
+                                  'Pizza',
+                                  'Healthy Food',
+                                  'Dessert'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                style: TextStyle(
+                                    fontSize: 17, color: Colors.black , fontWeight: FontWeight.bold),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue;
+                                    
+                                  });
+                                },
+                              ),
                   ],
                 ),
 
