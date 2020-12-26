@@ -15,7 +15,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // final AuthService _auth = AuthService();
- bool loading = true;
+  bool loading = true;
+  bool typing = false;
   List<CategoryDetail> category;
 
   CategoryService catServ = new CategoryService();
@@ -30,10 +31,10 @@ class _HomeState extends State<Home> {
     _fechRestaurantData();
   }
 
-
   bool _visible = false;
 
   List<RestaurantDetail> restaurant;
+  List<RestaurantDetail> restaurantall;
   List<RestaurantDetail> resSort;
 
   RestaurantService resServ = new RestaurantService();
@@ -42,12 +43,15 @@ class _HomeState extends State<Home> {
 
   // ignore: missing_return
   Future<List<RestaurantDetail>> _fechRestaurantData() async {
-    restaurant = await resServ.fetchData();
+    restaurantall = await resServ.fetchData();
+    restaurant = new List<RestaurantDetail>();
+    restaurant = restaurantall;
     resSort = await resServ.fetchData();
-     setState(() {
-      if(restaurant != null)
+    setState(() {
+      if (restaurant != null)
         loading = false;
-      else loading = true;
+      else
+        loading = true;
     });
   }
 
@@ -60,6 +64,18 @@ class _HomeState extends State<Home> {
   //     return dropdownlist(k);
   //   }
   // }
+
+  void _onchangesearch(String str) {
+    List<RestaurantDetail> temp = new List<RestaurantDetail>();
+    for (RestaurantDetail rd in restaurantall) {
+      if (rd.name.contains(str)) {
+        temp.add(rd);
+      }
+    }
+    setState(() {
+      restaurant = temp;
+    });
+  }
 
   Widget dropdownlist(int k) {
     return Container(
@@ -147,70 +163,86 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ?  Loading()
-     :Scaffold(
-     
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text('Vendor App'),
-        backgroundColor: Colors.green[400],
-      ),
-      body: Container(
-        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Icon(
-                  FontAwesomeIcons.utensils,
-                  size: 20,
-                  color: Colors.amber[600],
+    return loading
+        ? Loading()
+        : Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              title: typing
+                  ? TextField(
+                      onChanged: (text) {
+                        _onchangesearch(text);
+                      },
+                    )
+                  : Text('Vendor App'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      _onchangesearch('');
+                      setState(() {
+                        typing = !typing;
+                      });
+                    })
+              ],
+              backgroundColor: Colors.green[400],
+            ),
+            body: Container(
+              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Icon(
+                        FontAwesomeIcons.utensils,
+                        size: 20,
+                        color: Colors.amber[600],
+                      ),
+                    ),
+                    Text(
+                      ' The Restaurants ',
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green[700],
+                          fontStyle: FontStyle.normal),
+                    ),
+                    Spacer(),
+                    FlatButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _visible = !_visible;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.list,
+                          size: 30,
+                        ),
+                        label: Text(
+                          'Categories',
+                          style: TextStyle(fontSize: 20),
+                        )),
+                  ],
                 ),
-              ),
-              Text(
-                ' The Restaurants ',
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green[700],
-                    fontStyle: FontStyle.normal),
-              ),
-              Spacer(),
-              FlatButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      _visible = !_visible;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.list,
-                    size: 30,
-                  ),
-                  label: Text(
-                    'Categories',
-                    style: TextStyle(fontSize: 20),
-                  )),
-            ],
-          ),
 
-          // Visibility(
-          //   visible: _visible,
-          //   child: Row(children: [
-          //     Expanded(
-          //         child: ListView(children: <Widget>[
-          //       for (k = 0; k < category.length; k++) _bBuildCard()
-          //     ]))
-          //   ]),
-          // ),
-          Expanded(
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: restaurant.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    card(context, index)),
-          ),
-        ]),
-      ),
-    );
+                // Visibility(
+                //   visible: _visible,
+                //   child: Row(children: [
+                //     Expanded(
+                //         child: ListView(children: <Widget>[
+                //       for (k = 0; k < category.length; k++) _bBuildCard()
+                //     ]))
+                //   ]),
+                // ),
+                Expanded(
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: restaurant.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          card(context, index)),
+                ),
+              ]),
+            ),
+          );
   }
 }
