@@ -233,7 +233,7 @@ class _HomeState extends State<Home> {
                         'Categories',
                         'Fast food',
                         'Pizza',
-                        'Healthy food',
+                        'Healthy Food',
                         'Desserts'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
