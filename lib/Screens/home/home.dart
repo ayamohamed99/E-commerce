@@ -56,20 +56,6 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void change_list(String str) {
-    List<RestaurantDetail> temp = List<RestaurantDetail>();
-    for (RestaurantDetail rd in restaurantall) {
-      print(rd.name);
-      if (rd.name.contains(str)) {
-        print(rd.name);
-        temp.add(rd);
-      }
-    }
-    setState(() {
-      restaurant = temp;
-    });
-  }
-
   // // ignore: must_call_super
   // int k = 0;
   // // ignore: missing_return
@@ -79,6 +65,30 @@ class _HomeState extends State<Home> {
   //     return dropdownlist(k);
   //   }
   // }
+
+  void _onchangesearch(String str) {
+    List<RestaurantDetail> temp = new List<RestaurantDetail>();
+    for (RestaurantDetail rd in restaurantall) {
+      if (rd.name.contains(str)) {
+        temp.add(rd);
+      }
+    }
+    setState(() {
+      restaurant = temp;
+    });
+  }
+
+  void _onchangesearchcat(String str) {
+    List<RestaurantDetail> temp = new List<RestaurantDetail>();
+    for (RestaurantDetail rd in restaurantall) {
+      if (rd.categoryN == str) {
+        temp.add(rd);
+      }
+    }
+    setState(() {
+      restaurant = temp;
+    });
+  }
 
   Widget dropdownlist(int k) {
     return Container(
@@ -91,6 +101,8 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  String dropdownValue = 'Categories';
 
   Widget card(BuildContext context, int index) {
     return Container(
@@ -120,7 +132,7 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.circular(50)),
                 child: Text(
                   restaurant[restaurant.length - index - 1].name,
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: 20),
                 ),
                 onPressed: () {
                   setState(() async {
@@ -174,7 +186,7 @@ class _HomeState extends State<Home> {
               title: typing
                   ? TextField(
                       onChanged: (text) {
-                        change_list(text);
+                        _onchangesearch(text);
                       },
                     )
                   : Text('Vendor App'),
@@ -183,7 +195,7 @@ class _HomeState extends State<Home> {
                 IconButton(
                     icon: Icon(Icons.search),
                     onPressed: () {
-                      change_list('');
+                      _onchangesearch('');
                       //print(restaurant);
                       setState(() {
                         typing = !typing;
@@ -212,20 +224,36 @@ class _HomeState extends State<Home> {
                           fontStyle: FontStyle.normal),
                     ),
                     Spacer(),
-                    FlatButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            _visible = !_visible;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.list,
-                          size: 30,
-                        ),
-                        label: Text(
-                          'Categories',
-                          style: TextStyle(fontSize: 20),
-                        )),
+                    DropdownButton(
+                      value: dropdownValue,
+                      icon: Icon(Icons.list),
+                      iconSize: 25,
+                      elevation: 16,
+                      items: <String>[
+                        'Categories',
+                        'Fast food',
+                        'Pizza',
+                        'Healthy food',
+                        'Desserts'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                      onChanged: (String newValue) {
+                        newValue == 'Categories'
+                            ? _onchangesearch('')
+                            : _onchangesearchcat(newValue);
+                        setState(() {
+                          dropdownValue = newValue;
+                        });
+                      },
+                    ),
                   ],
                 ),
 
