@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
     _fechRestaurantData();
   }
 
-  bool _visible = false;
+  // bool _visible = false;
 
   List<RestaurantDetail> restaurant;
   List<RestaurantDetail> restaurantall;
@@ -189,7 +189,7 @@ class _HomeState extends State<Home> {
                         _onchangesearch(text);
                       },
                     )
-                  : Text('Vendor App'),
+                  : Text('Custmer App'),
               backgroundColor: Colors.green[400],
               actions: [
                 IconButton(

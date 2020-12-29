@@ -1,6 +1,7 @@
 import 'package:ecommerce/Components/loading.dart';
 import 'package:ecommerce/Models/restaurantDetail.dart';
 import 'package:ecommerce/Screens/home/home.dart';
+import 'package:ecommerce/Screens/home/tables.dart';
 import 'package:ecommerce/Services/restaurant.Services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ Future<void>_showMyDialog() async {
 
   // ignore: non_constant_identifier_names
   Container _MyCard(String resImg, String resName, String resDesc,
-      String resHeadline,String adress) {
+      String resHeadline) {
     return Container(
         color: Colors.white,
         width: 150.0,
@@ -140,7 +141,10 @@ Future<void>_showMyDialog() async {
         padding: EdgeInsets.all(8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             color: Colors.green[500],
-            onPressed: (){}, 
+            onPressed: (){
+              Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Tables()));
+            }, 
           child: Text('BOOK' , 
 
           style: TextStyle(fontWeight: FontWeight.bold,
@@ -263,7 +267,7 @@ Future<void>_showMyDialog() async {
                     restaurant.name,
                     restaurant.description,
                     restaurant.headline,
-                    restaurant.location
+                    
                     ),
               ),
             ],
