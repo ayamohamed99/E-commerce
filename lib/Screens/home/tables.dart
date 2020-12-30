@@ -1,162 +1,336 @@
-
+import 'package:ecommerce/Components/loading.dart';
+import 'package:ecommerce/Models/restaurantDetail.dart';
+import 'package:ecommerce/Screens/home/home.dart';
 import 'package:ecommerce/Screens/home/resForm.dart';
+import 'package:ecommerce/Services/restaurant.Services.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class Tables extends StatefulWidget {
+  Tables(this.rId);
+
+  final String rId;
+
   @override
-  _TablesState createState() => _TablesState();
+  _TablesState createState() => _TablesState(this.rId);
 }
 
 class _TablesState extends State<Tables> {
-  Color _iconColor = Colors.black;
-  Color _iconColor1 = Colors.black;
-  Color _iconColor2 = Colors.black;
-
+  String rId;
+  var restaurantV;
+  _TablesState(this.rId);
+  RestaurantDetail restaurant;
+  Color _icolor = Colors.black;
 
   void onChange() {
     setState(() {
-      _iconColor = Colors.green[700];
+      _icolor = Colors.green;
+      
     });
   }
 
-  void onChange1() {
+  RestaurantService resServ = new RestaurantService();
+  // ignore: missing_return
+  Future<RestaurantDetail> _fetchRestaurantData() async {
+    restaurantV = await resServ.getById(this.rId);
+    refresh();
+  }
+
+  void refresh() {
     setState(() {
-      _iconColor1 = Colors.green[700];
+      restaurant = restaurantV;
     });
   }
 
-void onChange2() {
-    setState(() {
-      _iconColor2 = Colors.green[700];
-    });
+  // ignore: must_call_super
+  void initState() {
+    _fetchRestaurantData();
+    _fechRestaurantData();
   }
+
+  List<RestaurantDetail> restaurantall;
+  // ignore: missing_return
+  Future<List<RestaurantDetail>> _fechRestaurantData() async {
+    restaurantall = await resServ.fetchData();
+  }
+
+  // ignore: non_constant_identifier_names
+  Container _MyCard(num seats, num table) {
+    // List<int> tables = [restaurantall[restaurantall.length].numTables.toInt()];
+
+    return Container(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'number of seats is',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('number of tables is',
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold))
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '$seats',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('$table',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            height: 100,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+                new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int i = 0; i < table && i < 4; i++)
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.chair),
+                      iconSize: 70,
+                      color: _icolor,
+                      onPressed: () {
+                        onChange();
+                      },
+                    ),
+                ],
+              ),
+              
+              
+            ],
+          ),
+           
+          
+          SizedBox(
+            height: 100,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              RaisedButton(
+                  child: Text('Next',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: Colors.white)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  color: Colors.green[500],
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BookForm(rId: this.rId)));
+                  })
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (restaurant == null) return Loading();
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.green[700],
-          title: Text('Table Booking'),
+      drawer: Drawer(
+          child: Column(children: <Widget>[
+        Container(
+          width: double.infinity,
+          height: 100,
+          padding: EdgeInsets.all(8),
+          color: Colors.green[500],
+          child: Center(
+              child: Text(
+            restaurant.name,
+            style: TextStyle(
+              fontSize: 25,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              height: 3,
+            ),
+          )),
         ),
-        body: new Container(
-          padding: EdgeInsets.fromLTRB(70,20,70,10),
-          child: new Column(children: <Widget>[
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                
-                SizedBox(width: 50),
-                IconButton(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 80),
-                  icon: Icon(
-                    FontAwesomeIcons.chair,
-                    color: _iconColor,
-                    size: 100,
-                  ),
-                  onPressed: onChange,
+        SizedBox(
+          height: 30,
+        ),
+        Container(
+          padding: EdgeInsets.only(right: 150),
+          child: FlatButton.icon(
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Home()));
+              },
+              icon: Icon(
+                Icons.home,
+              ),
+              label: Text(
+                'Home',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
-                new Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(width: 50),
-                    IconButton(
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 80),
-                      icon: Icon(
-                        FontAwesomeIcons.chair,
-                        color: _iconColor,
-                        size: 100,
-                      ),
-                      onPressed: onChange,
-                    ),
-                  ],
+              )),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Container(
+          padding: EdgeInsets.only(right: 35),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 30,
+              ),
+              Text(
+                'Rate  ',
+                style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
+              ),
+              Card(
+                child: SmoothStarRating(
+                  rating: restaurant.rate.toDouble(),
+                  isReadOnly: true,
+                  size: 20,
+                  filledIconData: Icons.star,
+                  halfFilledIconData: Icons.star_half,
+                  defaultIconData: Icons.star_border,
+                  starCount: 5,
+                  color: Colors.yellow[900],
+                  borderColor: Colors.yellow[900],
+                  allowHalfRating: true,
+                  spacing: 2.0,
+                  onRated: null,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Container(
+          padding: EdgeInsets.only(right: 90),
+          child: FlatButton.icon(
+              onPressed: () {},
+              icon: Icon(FontAwesomeIcons.utensils),
+              label: Text(
+                restaurant.categoryN,
+                style: TextStyle(fontSize: 25),
+              )),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Container(
+          padding: EdgeInsets.only(right: 70),
+          child: FlatButton.icon(
+              onPressed: _showMyDialog,
+              icon: Icon(FontAwesomeIcons.phoneAlt),
+              label: Text(
+                ' Contact us ',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              )),
+        ),
+      ])),
+      resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
+        title: Text(restaurant.name),
+        backgroundColor: Colors.green[400],
+      ),
+      body: Container(
+          color: Colors.white,
+          child: ListView(
+            children: [
+              Container(
+                child: _MyCard(
+                  restaurant.numSeats,
+                  restaurant.numTables,
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('HOTLINE'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'If you faced a problem and you need to contact with us Please Call  this number it is  an easy fast way to contact with us ' +
+                      '\n\n' +
+                      restaurant.hotline,
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 25,
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: Text('Close',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-            new Column(children: <Widget>[
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  
-                  SizedBox(width: 50),
-                  IconButton(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 80),
-                    icon: Icon(
-                      FontAwesomeIcons.chair,
-                      color: _iconColor1,
-                      size: 100,
-                    ),
-                    onPressed: onChange1,
-                  ),
-                  new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(width: 50),
-                        IconButton(
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 80),
-                          icon: Icon(
-                            FontAwesomeIcons.chair,
-                            color: _iconColor1,
-                            size: 100,
-                          ),
-                          onPressed: onChange1,
-                        ),
-                      ]),
-                ],
-              ),
-              SizedBox(height: 25,),
-               new Column(
-                
-                 children: <Widget>[
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                 
-                  SizedBox(width: 50),
-                  IconButton(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 80),
-                    icon: Icon(
-                      FontAwesomeIcons.chair,
-                      color: _iconColor2,
-                      size: 100,
-                    ),
-                    onPressed: onChange2,
-                  ),
-                  new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(width: 50),
-                        IconButton(
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 80),
-                          icon: Icon(
-                            FontAwesomeIcons.chair,
-                            color: _iconColor2,
-                            size: 100,
-                          ),
-                          onPressed: onChange2,
-                        ),
-                      ]), 
-                ]),
-                SizedBox(height: 25,),
-                RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  color: Colors.green,
-                  onPressed: () {
-                     Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => BookForm()));
-                  },
-                  child: Text(
-                    'Book',
-                    style: TextStyle(fontSize: 30,
-                    color: Colors.white),
-                  ),
-                ),
-               ]),
-            ]),
-          ]),
-        ));
+          ],
+        );
+      },
+    );
   }
 }

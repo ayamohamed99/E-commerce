@@ -1,3 +1,5 @@
+import 'package:ecommerce/Models/restaurantDetail.dart';
+import 'package:ecommerce/Services/restaurant.Services.dart';
 import 'package:flutter/material.dart';
 
 class BookForm extends StatefulWidget {
@@ -7,17 +9,20 @@ class BookForm extends StatefulWidget {
   final Function increaseCallback;
   final Function decreaseCallback;
   BookForm(
-      {this.initNumber,
+      { this.rId
+        ,this.initNumber,
       this.counterCallback,
       this.increaseCallback,
       this.decreaseCallback,
       Key key,
-      this.title})
+      this.title,})
       : super(key: key);
   final String title;
 
+
+  final String rId;
   @override
-  _BookFormState createState() => _BookFormState();
+  _BookFormState createState() => _BookFormState(rId);
 }
 
 class _BookFormState extends State<BookForm> {
@@ -47,14 +52,37 @@ class _BookFormState extends State<BookForm> {
     _increaseCallback = widget.increaseCallback ?? () {};
     _decreaseCallback = widget.decreaseCallback ?? () {};
     super.initState();
+     _fetchRestaurantData();
   }
+
+String rId;
+  var restaurantV;
+  _BookFormState(this.rId);
+  RestaurantDetail restaurant;
+
+  RestaurantService resServ = new RestaurantService();
+  // ignore: missing_return
+  Future<RestaurantDetail> _fetchRestaurantData() async {
+    restaurantV = await resServ.getById(this.rId);
+    refresh();
+  }
+
+  void refresh() {
+    setState(() {
+      restaurant = restaurantV;
+    });
+  }
+
+  // ignore: must_call_super
+ 
+ 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text("Book your table"),
+          title: Text(restaurant.name),
           backgroundColor: Colors.green[400],
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -143,76 +171,76 @@ class _BookFormState extends State<BookForm> {
                         Card(
                           color: Colors.green,
                           child: Text(
-                            '10:00',
+                            restaurant.timeRes.toString(),
                             style: TextStyle(fontSize: 25),
                           ),
                         ),
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            '10:30',
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            '11:00',
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            '11:30',
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            '12:00',
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            '12:30',
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            '01:00',
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            '01:30',
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            '02:00',
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: null,
-                          child: Card(
-                            color: Colors.green,
-                            child: Text(
-                              '02:30',
-                              style: TextStyle(fontSize: 25),
-                            ),
-                          ),
-                        ),
+                        // Card(
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     '10:30',
+                        //     style: TextStyle(fontSize: 25),
+                        //   ),
+                        // ),
+                        // Card(
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     '11:00',
+                        //     style: TextStyle(fontSize: 25),
+                        //   ),
+                        // ),
+                        // Card(
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     '11:30',
+                        //     style: TextStyle(fontSize: 25),
+                        //   ),
+                        // ),
+                        // Card(
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     '12:00',
+                        //     style: TextStyle(fontSize: 25),
+                        //   ),
+                        // ),
+                        // Card(
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     '12:30',
+                        //     style: TextStyle(fontSize: 25),
+                        //   ),
+                        // ),
+                        // Card(
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     '01:00',
+                        //     style: TextStyle(fontSize: 25),
+                        //   ),
+                        // ),
+                        // Card(
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     '01:30',
+                        //     style: TextStyle(fontSize: 25),
+                        //   ),
+                        // ),
+                        // Card(
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     '02:00',
+                        //     style: TextStyle(fontSize: 25),
+                        //   ),
+                        // ),
+                        // GestureDetector(
+                        //   onTap: null,
+                        //   child: Card(
+                        //     color: Colors.green,
+                        //     child: Text(
+                        //       '02:30',
+                        //       style: TextStyle(fontSize: 25),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

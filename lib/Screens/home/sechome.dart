@@ -142,8 +142,10 @@ Future<void>_showMyDialog() async {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             color: Colors.green[500],
             onPressed: (){
-              Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Tables()));
+             Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Tables(rId)));
             }, 
           child: Text('BOOK' , 
 

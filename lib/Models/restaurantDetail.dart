@@ -9,7 +9,7 @@ class RestaurantDetail {
   String rId;
   num numSeats;
   num numTables;
-  List<num> timeRes;
+  List<String> timeRes;
   // num hit;
   String headline;
   String description;
@@ -17,7 +17,7 @@ class RestaurantDetail {
   
 
   RestaurantDetail(
-      {this.name,this.description,this.numSeats,this.numTables,//this.timeRes,
+      {this.name,this.description,this.numSeats,this.numTables,this.timeRes,
         this.img, this.headline, 
        this.rate, this.rId, this.catId , 
         this.hotline , this.categoryN ,
@@ -37,7 +37,7 @@ class RestaurantDetail {
         hotline = snapshot['hotline'] ?? '' ,
         numSeats = snapshot['numSeats']??'',
         numTables = snapshot['numTables']??'',
-        //timeRes=snapshot['timeRes']??'',
+        // timeRes=snapshot['timeRes']??'',
         description=snapshot['description']??'';
 
         
@@ -54,7 +54,7 @@ class RestaurantDetail {
       "categoryN" :categoryN,
       "numSeats":numSeats,
       "numTables":numTables,
-      //"timeRes": timeRes,
+      // "timeRes": timeRes,
       "description":description,
       "headline" : headline,
       "hotline" : hotline
