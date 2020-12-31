@@ -8,17 +8,16 @@ class BookForm extends StatefulWidget {
   final Function(int) counterCallback;
   final Function increaseCallback;
   final Function decreaseCallback;
-  BookForm(
-      { this.rId
-        ,this.initNumber,
-      this.counterCallback,
-      this.increaseCallback,
-      this.decreaseCallback,
-      Key key,
-      this.title,})
-      : super(key: key);
+  BookForm({
+    this.rId,
+    this.initNumber,
+    this.counterCallback,
+    this.increaseCallback,
+    this.decreaseCallback,
+    Key key,
+    this.title,
+  }) : super(key: key);
   final String title;
-
 
   final String rId;
   @override
@@ -44,7 +43,6 @@ class _BookFormState extends State<BookForm> {
   Function _counterCallback;
   Function _increaseCallback;
   Function _decreaseCallback;
-
   @override
   void initState() {
     _currentCount = widget.initNumber ?? 1;
@@ -52,30 +50,47 @@ class _BookFormState extends State<BookForm> {
     _increaseCallback = widget.increaseCallback ?? () {};
     _decreaseCallback = widget.decreaseCallback ?? () {};
     super.initState();
-     _fetchRestaurantData();
+    //  _fetchRestaurantData();
+    _getRestaurantData();
   }
 
-String rId;
+  Future<void> _getRestaurantData() async {
+    //  setState(() async{
+    //   restaurant = await resServ.getById(this.rId);
+    // });
+    resServ.getById(rId).then((value) => {
+          if (value != null)
+            {
+              this.setState(() {
+                restaurant = value;
+              })
+            }
+        });
+  }
+
+  String rId;
   var restaurantV;
   _BookFormState(this.rId);
   RestaurantDetail restaurant;
 
   RestaurantService resServ = new RestaurantService();
   // ignore: missing_return
-  Future<RestaurantDetail> _fetchRestaurantData() async {
-    restaurantV = await resServ.getById(this.rId);
-    refresh();
-  }
+  // Future<RestaurantDetail> _fetchRestaurantData() async {
+  //   restaurantV = await resServ.getById(this.rId);
+  //   refresh();
+  // }
 
-  void refresh() {
-    setState(() {
-      restaurant = restaurantV;
-    });
-  }
+  // void refresh() {
+  //   setState(() {
+  //     restaurant = restaurantV;
+  //   });
+  // }
 
   // ignore: must_call_super
- 
- 
+  // static const Color timeColor = Colors.blueGrey;
+  static const Color resTimeColor = Colors.blueGrey;
+  static const Color notResTimeColor = Colors.green;
+  bool resTimeFlage = false;
 
   @override
   Widget build(BuildContext context) {
@@ -164,84 +179,107 @@ String rId;
                 ),
                 Container(
                   child: Expanded(
-                    child: ListView(
+                    child: ListView.builder(
+                      itemCount: restaurant.timeRes.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                             resTimeFlage = !resTimeFlage;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              color: resTimeFlage ? notResTimeColor : resTimeColor,
+                              border: Border.all(
+                                color: Colors.black,
+                                // width: 0,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              restaurant.timeRes[index].toString(),
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.black),
+                            ),
+                          ),
+                          // leading: Color(value)
+                        );
+                        // );
+                      },
                       padding: const EdgeInsets.all(16),
                       scrollDirection: Axis.horizontal,
-                      children: [
-                        Card(
-                          color: Colors.green,
-                          child: Text(
-                            restaurant.timeRes.toString(),
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ),
-                        // Card(
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     '10:30',
-                        //     style: TextStyle(fontSize: 25),
-                        //   ),
-                        // ),
-                        // Card(
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     '11:00',
-                        //     style: TextStyle(fontSize: 25),
-                        //   ),
-                        // ),
-                        // Card(
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     '11:30',
-                        //     style: TextStyle(fontSize: 25),
-                        //   ),
-                        // ),
-                        // Card(
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     '12:00',
-                        //     style: TextStyle(fontSize: 25),
-                        //   ),
-                        // ),
-                        // Card(
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     '12:30',
-                        //     style: TextStyle(fontSize: 25),
-                        //   ),
-                        // ),
-                        // Card(
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     '01:00',
-                        //     style: TextStyle(fontSize: 25),
-                        //   ),
-                        // ),
-                        // Card(
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     '01:30',
-                        //     style: TextStyle(fontSize: 25),
-                        //   ),
-                        // ),
-                        // Card(
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     '02:00',
-                        //     style: TextStyle(fontSize: 25),
-                        //   ),
-                        // ),
-                        // GestureDetector(
-                        //   onTap: null,
-                        //   child: Card(
-                        //     color: Colors.green,
-                        //     child: Text(
-                        //       '02:30',
-                        //       style: TextStyle(fontSize: 25),
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
+                      // children: [
+
+                      // Card(
+                      //   color: Colors.green,
+                      //   child: Text(
+                      //     '10:30',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Card(
+                      //   color: Colors.green,
+                      //   child: Text(
+                      //     '11:00',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Card(
+                      //   color: Colors.green,
+                      //   child: Text(
+                      //     '11:30',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Card(
+                      //   color: Colors.green,
+                      //   child: Text(
+                      //     '12:00',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Card(
+                      //   color: Colors.green,
+                      //   child: Text(
+                      //     '12:30',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Card(
+                      //   color: Colors.green,
+                      //   child: Text(
+                      //     '01:00',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Card(
+                      //   color: Colors.green,
+                      //   child: Text(
+                      //     '01:30',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // Card(
+                      //   color: Colors.green,
+                      //   child: Text(
+                      //     '02:00',
+                      //     style: TextStyle(fontSize: 25),
+                      //   ),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: null,
+                      //   child: Card(
+                      //     color: Colors.green,
+                      //     child: Text(
+                      //       '02:30',
+                      //       style: TextStyle(fontSize: 25),
+                      //     ),
+                      //   ),
+                      // ),
+                      // ],
                     ),
                   ),
                 ),

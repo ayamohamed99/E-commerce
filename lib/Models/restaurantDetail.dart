@@ -37,10 +37,8 @@ class RestaurantDetail {
         hotline = snapshot['hotline'] ?? '' ,
         numSeats = snapshot['numSeats']??'',
         numTables = snapshot['numTables']??'',
-        // timeRes=snapshot['timeRes']??'',
+        timeRes=snapshot['timeRes'].map<String>((el) => el.toString()).toList() ?? [],
         description=snapshot['description']??'';
-
-        
 
   toJson() {
     return {
@@ -54,7 +52,7 @@ class RestaurantDetail {
       "categoryN" :categoryN,
       "numSeats":numSeats,
       "numTables":numTables,
-      // "timeRes": timeRes,
+      "timeRes": timeRes,
       "description":description,
       "headline" : headline,
       "hotline" : hotline
