@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
+import '../../Models/restaurantDetail.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -15,8 +17,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // final AuthService _auth = AuthService();
-  bool loading = true;
   bool typing = false;
+  bool loading = true;
   List<CategoryDetail> category;
 
   CategoryService catServ = new CategoryService();
@@ -31,7 +33,7 @@ class _HomeState extends State<Home> {
     _fechRestaurantData();
   }
 
-  bool _visible = false;
+  // bool _visible = false;
 
   List<RestaurantDetail> restaurant;
   List<RestaurantDetail> restaurantall;
@@ -44,7 +46,6 @@ class _HomeState extends State<Home> {
   // ignore: missing_return
   Future<List<RestaurantDetail>> _fechRestaurantData() async {
     restaurantall = await resServ.fetchData();
-    restaurant = new List<RestaurantDetail>();
     restaurant = restaurantall;
     resSort = await resServ.fetchData();
     setState(() {
@@ -77,6 +78,18 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _onchangesearchcat(String str) {
+    List<RestaurantDetail> temp = new List<RestaurantDetail>();
+    for (RestaurantDetail rd in restaurantall) {
+      if (rd.categoryN == str) {
+        temp.add(rd);
+      }
+    }
+    setState(() {
+      restaurant = temp;
+    });
+  }
+
   Widget dropdownlist(int k) {
     return Container(
       height: 30,
@@ -88,6 +101,8 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  String dropdownValue = 'Categories';
 
   Widget card(BuildContext context, int index) {
     return Container(
@@ -117,7 +132,7 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.circular(50)),
                 child: Text(
                   restaurant[restaurant.length - index - 1].name,
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: 20),
                 ),
                 onPressed: () {
                   setState(() async {
@@ -174,18 +189,19 @@ class _HomeState extends State<Home> {
                         _onchangesearch(text);
                       },
                     )
-                  : Text('Vendor App'),
-              actions: <Widget>[
+                  : Text('Custmer App'),
+              backgroundColor: Colors.green[400],
+              actions: [
                 IconButton(
                     icon: Icon(Icons.search),
                     onPressed: () {
                       _onchangesearch('');
+                      //print(restaurant);
                       setState(() {
                         typing = !typing;
                       });
                     })
               ],
-              backgroundColor: Colors.green[400],
             ),
             body: Container(
               child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -208,20 +224,36 @@ class _HomeState extends State<Home> {
                           fontStyle: FontStyle.normal),
                     ),
                     Spacer(),
-                    FlatButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            _visible = !_visible;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.list,
-                          size: 30,
-                        ),
-                        label: Text(
-                          'Categories',
-                          style: TextStyle(fontSize: 20),
-                        )),
+                    DropdownButton(
+                      value: dropdownValue,
+                      icon: Icon(Icons.list),
+                      iconSize: 25,
+                      elevation: 16,
+                      items: <String>[
+                        'Categories',
+                        'Fast food',
+                        'Pizza',
+                        'Healthy Food',
+                        'Desserts'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                      onChanged: (String newValue) {
+                        newValue == 'Categories'
+                            ? _onchangesearch('')
+                            : _onchangesearchcat(newValue);
+                        setState(() {
+                          dropdownValue = newValue;
+                        });
+                      },
+                    ),
                   ],
                 ),
 
