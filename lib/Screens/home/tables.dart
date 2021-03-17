@@ -1,7 +1,9 @@
 import 'package:ecommerce/Components/loading.dart';
+// import 'package:ecommerce/Models/reservedtable.dart';
 import 'package:ecommerce/Models/restaurantDetail.dart';
 import 'package:ecommerce/Screens/home/home.dart';
 import 'package:ecommerce/Screens/home/resForm.dart';
+import 'package:ecommerce/Services/reservedTable.service.dart';
 import 'package:ecommerce/Services/restaurant.Services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +29,12 @@ class _TablesState extends State<Tables> {
   void onChange() {
     setState(() {
       _icolor = Colors.green;
-      
     });
   }
 
   RestaurantService resServ = new RestaurantService();
+  ServiceReservedTable resTableServ = new ServiceReservedTable();
+  dynamic resTables;
   // ignore: missing_return
   Future<RestaurantDetail> _fetchRestaurantData() async {
     restaurantV = await resServ.getById(this.rId);
@@ -47,19 +50,19 @@ class _TablesState extends State<Tables> {
   // ignore: must_call_super
   void initState() {
     _fetchRestaurantData();
-    _fechRestaurantData();
+    _getResTables(rId);
+    // _fechRestaurantData();
   }
 
-  List<RestaurantDetail> restaurantall;
-  // ignore: missing_return
-  Future<List<RestaurantDetail>> _fechRestaurantData() async {
-    restaurantall = await resServ.fetchData();
-  }
+  // List<RestaurantDetail> restaurantall;
+  // // ignore: missing_return
+  // Future<List<RestaurantDetail>> _fechRestaurantData() async {
+  //   restaurantall = await resServ.fetchData();
+  // }
 
   // ignore: non_constant_identifier_names
   Container _MyCard(num seats, num table) {
     // List<int> tables = [restaurantall[restaurantall.length].numTables.toInt()];
-
     return Container(
       child: Column(
         children: [
@@ -72,7 +75,7 @@ class _TablesState extends State<Tables> {
                 children: [
                   Text(
                     'number of seats is',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -80,9 +83,9 @@ class _TablesState extends State<Tables> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('number of tables is',
+                  Text('number of available tables is',
                       style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold))
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold))
                 ],
               ),
             ],
@@ -121,10 +124,10 @@ class _TablesState extends State<Tables> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                new Row(
+              new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  for (int i = 0; i < table && i < 4; i++)
+                  for (int i = 0; i < table.abs() && i < 4; i++)
                     IconButton(
                       icon: Icon(FontAwesomeIcons.chair),
                       iconSize: 70,
@@ -135,12 +138,8 @@ class _TablesState extends State<Tables> {
                     ),
                 ],
               ),
-              
-              
             ],
           ),
-           
-          
           SizedBox(
             height: 100,
           ),
@@ -169,6 +168,22 @@ class _TablesState extends State<Tables> {
       ),
     );
   }
+
+  int counter = 0;
+  Future<num> _getResTables(String resId) async {
+    resTables = await resTableServ.fetchData();
+    for (var resTable in resTables) {
+      if (resTable.restaurantId == resId) {
+        counter++;
+        setState(() {
+          availableTable = counter;
+        });
+        
+      }
+    }
+    return counter;
+  }
+  num availableTable;
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +306,7 @@ class _TablesState extends State<Tables> {
               Container(
                 child: _MyCard(
                   restaurant.numSeats,
-                  restaurant.numTables,
+                  restaurant.numTables - availableTable,
                 ),
               ),
             ],

@@ -1,4 +1,7 @@
+import 'package:ecommerce/Models/ReservedTable.dart';
 import 'package:ecommerce/Models/restaurantDetail.dart';
+// import 'package:ecommerce/Screens/home/tables.dart';
+import 'package:ecommerce/Services/reservedTable.service.dart';
 import 'package:ecommerce/Services/restaurant.Services.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +11,7 @@ class BookForm extends StatefulWidget {
   final Function(int) counterCallback;
   final Function increaseCallback;
   final Function decreaseCallback;
+
   BookForm({
     this.rId,
     this.initNumber,
@@ -25,6 +29,23 @@ class BookForm extends StatefulWidget {
 }
 
 class _BookFormState extends State<BookForm> {
+  // ReservedTable resTable = new ReservedTable();
+  ServiceReservedTable servResTable = new ServiceReservedTable();
+  num _tableNum = 2;
+  num _chairNum = 1;
+  String _time = '';
+  String _date = '';
+  String _resTableId = '';
+  ReservedTable getResTable() {
+    return new ReservedTable(
+        tableNum: _tableNum,
+        chairNum: _chairNum,
+        restaurantId: restaurant.rId,
+        date: _date,
+        time: _time,
+        resTableId: _resTableId);
+  }
+
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -36,6 +57,7 @@ class _BookFormState extends State<BookForm> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
+        _date = selectedDate.toString();
       });
   }
 
@@ -43,6 +65,7 @@ class _BookFormState extends State<BookForm> {
   Function _counterCallback;
   Function _increaseCallback;
   Function _decreaseCallback;
+  dynamic checker;
   @override
   void initState() {
     _currentCount = widget.initNumber ?? 1;
@@ -68,6 +91,24 @@ class _BookFormState extends State<BookForm> {
         });
   }
 
+  ServiceReservedTable resTableServ = new ServiceReservedTable();
+  dynamic resTables;
+  Future<bool> _checkValidTime(String resId) async {
+    resTables = await resTableServ.fetchData();
+    for (var resTable in resTables) {
+      if (resTable.time == _time && resTable.date == _date)
+        return true;
+      else
+        return false;
+    }
+  }
+
+  _validationTime() async {
+    // setState(() {
+    checker = await _checkValidTime(rId);
+    // });
+  }
+
   String rId;
   var restaurantV;
   _BookFormState(this.rId);
@@ -91,6 +132,8 @@ class _BookFormState extends State<BookForm> {
   static const Color resTimeColor = Colors.blueGrey;
   static const Color notResTimeColor = Colors.green;
   bool resTimeFlage = false;
+
+  List<bool> testFlag = [false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +199,12 @@ class _BookFormState extends State<BookForm> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30)),
                       color: Colors.green,
-                      onPressed: () => _selectDate(context),
+                      onPressed: () {
+                        setState(() {
+                          _selectDate(context);
+                          // _date = _selectDate(context).toString();
+                        });
+                      },
                       child: Text('Select date'),
                     ),
                     SizedBox(
@@ -185,14 +233,18 @@ class _BookFormState extends State<BookForm> {
                         return InkWell(
                           onTap: () {
                             setState(() {
-                             resTimeFlage = !resTimeFlage;
+                              testFlag[index] = !testFlag[index];
+                              print(testFlag[index]);
+                              _time = restaurant.timeRes[index].toString();
                             });
                           },
                           child: Container(
                             margin: const EdgeInsets.all(5.0),
                             padding: const EdgeInsets.all(10.0),
                             decoration: BoxDecoration(
-                              color: resTimeFlage ? notResTimeColor : resTimeColor,
+                              color: testFlag[index]
+                                  ? resTimeColor
+                                  : notResTimeColor,
                               border: Border.all(
                                 color: Colors.black,
                                 // width: 0,
@@ -211,75 +263,6 @@ class _BookFormState extends State<BookForm> {
                       },
                       padding: const EdgeInsets.all(16),
                       scrollDirection: Axis.horizontal,
-                      // children: [
-
-                      // Card(
-                      //   color: Colors.green,
-                      //   child: Text(
-                      //     '10:30',
-                      //     style: TextStyle(fontSize: 25),
-                      //   ),
-                      // ),
-                      // Card(
-                      //   color: Colors.green,
-                      //   child: Text(
-                      //     '11:00',
-                      //     style: TextStyle(fontSize: 25),
-                      //   ),
-                      // ),
-                      // Card(
-                      //   color: Colors.green,
-                      //   child: Text(
-                      //     '11:30',
-                      //     style: TextStyle(fontSize: 25),
-                      //   ),
-                      // ),
-                      // Card(
-                      //   color: Colors.green,
-                      //   child: Text(
-                      //     '12:00',
-                      //     style: TextStyle(fontSize: 25),
-                      //   ),
-                      // ),
-                      // Card(
-                      //   color: Colors.green,
-                      //   child: Text(
-                      //     '12:30',
-                      //     style: TextStyle(fontSize: 25),
-                      //   ),
-                      // ),
-                      // Card(
-                      //   color: Colors.green,
-                      //   child: Text(
-                      //     '01:00',
-                      //     style: TextStyle(fontSize: 25),
-                      //   ),
-                      // ),
-                      // Card(
-                      //   color: Colors.green,
-                      //   child: Text(
-                      //     '01:30',
-                      //     style: TextStyle(fontSize: 25),
-                      //   ),
-                      // ),
-                      // Card(
-                      //   color: Colors.green,
-                      //   child: Text(
-                      //     '02:00',
-                      //     style: TextStyle(fontSize: 25),
-                      //   ),
-                      // ),
-                      // GestureDetector(
-                      //   onTap: null,
-                      //   child: Card(
-                      //     color: Colors.green,
-                      //     child: Text(
-                      //       '02:30',
-                      //       style: TextStyle(fontSize: 25),
-                      //     ),
-                      //   ),
-                      // ),
-                      // ],
                     ),
                   ),
                 ),
@@ -287,7 +270,27 @@ class _BookFormState extends State<BookForm> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
                   color: Colors.green,
-                  onPressed: () {},
+                  onPressed: () {
+                    _validationTime();
+                    if (checker) {
+                      _showMyDialog();
+                      setState(() {
+                        testFlag = [false, false];
+                        _time = '';
+                      });
+                    } else {
+                      servResTable
+                          .addRestable(getResTable())
+                          .then((value) => _resTableId = value.documentID)
+                          .then((uValue) =>
+                              servResTable.update(getResTable(), _resTableId))
+                          .then((value) => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      BookForm(rId: this.rId))));
+                    }
+                  },
                   child: Text(
                     'Done',
                     style: TextStyle(fontSize: 20),
@@ -300,12 +303,16 @@ class _BookFormState extends State<BookForm> {
   }
 
   void _increment() {
-    if (_currentCount < 5)
+    print(_chairNum);
+    if (_currentCount < 5) {
       setState(() {
         _currentCount++;
         _counterCallback(_currentCount);
         _increaseCallback();
+        _chairNum = _currentCount;
+        print(_chairNum);
       });
+    }
   }
 
   void _dicrement() {
@@ -315,6 +322,7 @@ class _BookFormState extends State<BookForm> {
         _counterCallback(_currentCount);
         _decreaseCallback();
       }
+      _chairNum = _currentCount;
     });
   }
 
@@ -331,6 +339,34 @@ class _BookFormState extends State<BookForm> {
         size: 25.0,
       ),
       shape: CircleBorder(),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Time Validation'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Sorry, this time is already taken.'),
+                Text('Please, choose another time'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
