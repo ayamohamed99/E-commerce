@@ -1,11 +1,9 @@
 import 'package:ecommerce/Models/ReservedTable.dart';
 import 'package:ecommerce/Models/restaurantDetail.dart';
-// import 'package:ecommerce/Screens/home/tables.dart';
 import 'package:ecommerce/Services/reservedTable.service.dart';
 import 'package:ecommerce/Services/restaurant.Services.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+
 
 import 'home.dart';
 
