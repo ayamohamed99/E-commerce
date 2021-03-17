@@ -66,16 +66,18 @@ class _TablesState extends State<Tables> {
     return Container(
       child: Column(
         children: [
+          SizedBox(height: 20,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'number of seats is',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    'number of seats :',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -83,9 +85,9 @@ class _TablesState extends State<Tables> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('number of available tables is',
+                  Text('number of available tables :',
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold))
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
                 ],
               ),
             ],
@@ -305,8 +307,9 @@ class _TablesState extends State<Tables> {
             children: [
               Container(
                 child: _MyCard(
-                  restaurant.numSeats,
-                  restaurant.numTables - availableTable,
+                  // restaurant.numSeats,
+                  // restaurant.numTables - availableTable,
+                  8,4
                 ),
               ),
             ],

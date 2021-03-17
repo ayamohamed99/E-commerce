@@ -204,7 +204,9 @@ class _HomeState extends State<Home> {
               ],
             ),
             body: Container(
-              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              child: Column(mainAxisSize: MainAxisSize.min,
+               children: <Widget>[
+                 SizedBox(height: 20,),
                 Row(
                   children: [
                     Padding(
@@ -227,7 +229,7 @@ class _HomeState extends State<Home> {
                     DropdownButton(
                       value: dropdownValue,
                       icon: Icon(Icons.list),
-                      iconSize: 25,
+                      iconSize: 30,
                       elevation: 16,
                       items: <String>[
                         'Categories',
@@ -242,7 +244,7 @@ class _HomeState extends State<Home> {
                         );
                       }).toList(),
                       style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 22,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                       onChanged: (String newValue) {

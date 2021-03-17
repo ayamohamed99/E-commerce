@@ -4,6 +4,10 @@ import 'package:ecommerce/Models/restaurantDetail.dart';
 import 'package:ecommerce/Services/reservedTable.service.dart';
 import 'package:ecommerce/Services/restaurant.Services.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
+
+import 'home.dart';
 
 class BookForm extends StatefulWidget {
   final int initNumber;
@@ -93,6 +97,8 @@ class _BookFormState extends State<BookForm> {
 
   ServiceReservedTable resTableServ = new ServiceReservedTable();
   dynamic resTables;
+  
+  // ignore: missing_return
   Future<bool> _checkValidTime(String resId) async {
     resTables = await resTableServ.fetchData();
     for (var resTable in resTables) {
@@ -138,6 +144,15 @@ class _BookFormState extends State<BookForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.home, size: 35,),
+        backgroundColor: Colors.green,
+        onPressed: 
+         () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Home()));
+              },
+        ),
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text(restaurant.name),
@@ -275,7 +290,7 @@ class _BookFormState extends State<BookForm> {
                     if (checker) {
                       _showMyDialog();
                       setState(() {
-                        testFlag = [false, false];
+                        testFlag = [false, false , false];
                         _time = '';
                       });
                     } else {
@@ -358,7 +373,7 @@ class _BookFormState extends State<BookForm> {
             ),
           ),
           actions: <Widget>[
-            TextButton(
+            RaisedButton(
               child: Text('ok'),
               onPressed: () {
                 Navigator.of(context).pop();
